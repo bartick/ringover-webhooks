@@ -25,22 +25,28 @@ Features
 Prerequisites
 -------------
 - Python 3.8+
-- MySQL Database
+- MySQL Database (optional)
 - pip (https://pip.pypa.io/en/stable/)
 
 Installation
 ------------
 1. Clone the repository:
-   git clone <repository-url>
+```
+git clone <repository-url>
+```
 
-2. Navigate to the project directory:
-   cd <project-directory>/python
+3. Navigate to the project directory:
+```
+cd <project-directory>/python
+```
 
-3. Install the dependencies:
-   pip install -r requirements.txt
+4. Install the dependencies:
+```
+pip install -r requirements.txt
+```
 
-Configuration
--------------
+Configuration MYSQL (if needeed)
+-------------------
 Set the following environment variables or create a .env file:
 
   - RINGOVER_SECRET: Your secret key used for verifying webhook signatures.
@@ -51,10 +57,17 @@ Running the Application
 -----------------------
 Start the application using Uvicorn:
 
-   uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+```   
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+```
+or 
+```   
+python app.py
+```
 
 Endpoints
 ---------
+```
 Call Events:
   - /ringover/call/voicemail_available
   - /ringover/call/record_available
@@ -65,11 +78,13 @@ Call Events:
   - /ringover/call/hangup
   - /ringover/call/answered
   - /ringover/call/ringing
+```
 
 Contact Events:
   - /ringover/contact
     Sample Response:
-      {
+```
+{
 		"uuid": "b55f949b-c49b-4354-b10a-c8c4cdbd8690",
 		"firstname": "Jean-Pierre",
 		"lastname": "De La Court",
@@ -81,11 +96,13 @@ Contact Events:
 			"keyN": "valueN"
 		},
 		"is_shared": true
-	}
+}
+```
   - /ringover/contact-search-event
     Sample Response:
-	[
-		{
+```
+[
+	{
 		"firstname": "Jean-Pierre",
 		"lastname": "De La Court",
 		"company": "Ringover",
@@ -95,10 +112,10 @@ Contact Events:
 				"number": 33184800000,
 				"type": "mobile"
 			}
-			]	
-		}
-	]
-      
+		]	
+	}
+]
+```   
 Other Webhook Events:
   - /ringover/webhook-message
   - /ringover/webhook-ivr
@@ -106,7 +123,8 @@ Other Webhook Events:
 Smart Routing:
   - /ringover/smart_routing
     Sample Response:
-	{
+```
+{
 	"name": "redirections",
 	"dispatch": "ringall",
 	"max_attempts": 1,
@@ -128,8 +146,8 @@ Smart Routing:
 			"is_head_line": 0
 		}
 	]
-	}      
-
+}      
+```
 License
 -------
 This project is licensed under the MIT License. See the LICENSE file for details.
