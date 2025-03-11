@@ -58,7 +58,7 @@ Running the Application
 Start the application using Uvicorn:
 
 ```   
-uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+uvicorn app:app --host 0.0.0.0 --port 8000 --reload
 ```
 or 
 ```   
