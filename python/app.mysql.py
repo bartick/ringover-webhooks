@@ -16,6 +16,7 @@ app = FastAPI()
 # Secrets and database configuration
 RINGOVER_SECRET = os.getenv("RINGOVER_SECRET", "your_secret_here")
 DATABASE_URL = os.getenv("DATABASE_URL", "mysql+pymysql://user:password@localhost/dbname")
+HTTP_PORT = os.getenv("RINGOVER_HTTP_PORT", "8089")
 
 # Set up SQLAlchemy engine and session
 engine = create_engine(DATABASE_URL, echo=True,future=True)
@@ -467,4 +468,4 @@ async def smart_routing_event(request: Request, x_ringover_signature: str = Head
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=int(HTTP_PORT), reload=True)
