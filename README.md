@@ -11,5 +11,4 @@ Each endpoint:
   - Verifies the HMAC signature to ensure authenticity.
   - Validates the incoming JSON payload.
   - Logs the event details.
-  - Stores events in a MySQL database.
   - Returns sample responses based on the Ringover documentation.
