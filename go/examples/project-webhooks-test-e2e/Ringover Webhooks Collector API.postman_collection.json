@@ -1,0 +1,622 @@
+{
+  "info": {
+    "_postman_id": "f70a46d7-416a-4739-899c-2fd3d4ac5341",
+    "name": "Ringover Webhooks Collector API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "20885046",
+    "_collection_link": "https://ringoverdev.postman.co/workspace/ringover-webhooks~815da485-f2d1-478d-9f25-8e57b221a157/collection/20885046-f70a46d7-416a-4739-899c-2fd3d4ac5341?action=share&source=collection_link&creator=20885046"
+  },
+  "item": [
+    {
+      "name": "Aftercall updated",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "XXX"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n          \"resource\": \"aftercall\",\n          \"event\": \"comments_updated\",\n          \"timestamp\": \"2025-04-11T10:00:00Z\",\n          \"data\": {\n                                        \"call_id\": 1234567890987654400,\n                                        \"channel_id\": 123456789,\n                                        \"tags\": [\"tag1\", \"tag2\"],\n                                        \"comments\": \"Valid comment\"\n                                }\n      }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}ringover/webhooks",
+          "host": ["{{baseUrl}}ringover"],
+          "path": ["webhooks"]
+        },
+        "description": "Push a Ringover Webhook and validate it based on its resource and event types"
+      },
+      "response": [
+        {
+          "name": "No Content",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "<string>",
+                "description": "(Required) "
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resource\": \"<string>\",\n  \"event\": \"<string>\",\n  \"timestamp\": \"<dateTime>\",\n  \"data\": {}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/ringover/webhooks",
+              "host": ["{{baseUrl}}"],
+              "path": ["ringover", "webhooks"]
+            }
+          },
+          "status": "No Content",
+          "code": 204,
+          "_postman_previewlanguage": "text",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "cookie": [],
+          "body": ""
+        },
+        {
+          "name": "Error",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "<string>",
+                "description": "(Required) "
+              },
+              {
+                "key": "Accept",
+                "value": "application/problem+json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resource\": \"<string>\",\n  \"event\": \"<string>\",\n  \"timestamp\": \"<dateTime>\",\n  \"data\": {}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/ringover/webhooks",
+              "host": ["{{baseUrl}}"],
+              "path": ["ringover", "webhooks"]
+            }
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/problem+json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"$schema\": \"<uri>\",\n  \"detail\": \"<string>\",\n  \"errors\": [\n    {\n      \"location\": \"<string>\",\n      \"message\": \"<string>\",\n      \"value\": {}\n    },\n    {\n      \"location\": \"<string>\",\n      \"message\": \"<string>\",\n      \"value\": {}\n    }\n  ],\n  \"instance\": \"<uri>\",\n  \"status\": \"<long>\",\n  \"title\": \"<string>\",\n  \"type\": \"about:blank\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Call ringing",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "XXX"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"resource\": \"call\",\n    \"event\": \"ringing\",\n    \"timestamp\": \"2025-04-11T10:00:00Z\",\n    \"data\": {\n        \"id\": \"57622f20-a020-4f9e-814c-62a6123412fa\",\n        \"call_id\": 1234567890987654400,\n        \"channel_id\": 123456789,\n        \"start_time\": 1554823493.762305,\n        \"direction\": \"inbound\",\n        \"from_number\": \"33123456789\",\n        \"to_number\": \"33123456789\",\n        \"user_id\": 12345678,\n        \"is_internal\": 1,\n        \"is_anonymous\": 0,\n        \"is_ivr\": 1,\n        \"ivr_data\": {},\n        \"user\": {\n            \"user_id\": 123456789,\n            \"firstname\": \"Jean\",\n            \"lastname\": \"Dupont\",\n            \"email\": \"jean.dupont@ringover.com\",\n            \"photo\": \"https://cdn.ringover.com/img/users/default.jpg\"\n        },\n        \"status\": \"ringing\"\n    }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}ringover/webhooks",
+          "host": ["{{baseUrl}}ringover"],
+          "path": ["webhooks"]
+        },
+        "description": "Push a Ringover Webhook for call ringing event"
+      },
+      "response": [
+        {
+          "name": "No Content",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "<string>",
+                "description": "(Required) "
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resource\": \"<string>\",\n  \"event\": \"<string>\",\n  \"timestamp\": \"<dateTime>\",\n  \"data\": {}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/ringover/webhooks",
+              "host": ["{{baseUrl}}"],
+              "path": ["ringover", "webhooks"]
+            }
+          },
+          "status": "No Content",
+          "code": 204,
+          "_postman_previewlanguage": "text",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "cookie": [],
+          "body": ""
+        },
+        {
+          "name": "Error",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "<string>",
+                "description": "(Required) "
+              },
+              {
+                "key": "Accept",
+                "value": "application/problem+json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resource\": \"<string>\",\n  \"event\": \"<string>\",\n  \"timestamp\": \"<dateTime>\",\n  \"data\": {}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/ringover/webhooks",
+              "host": ["{{baseUrl}}"],
+              "path": ["ringover", "webhooks"]
+            }
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/problem+json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"$schema\": \"<uri>\",\n  \"detail\": \"<string>\",\n  \"errors\": [\n    {\n      \"location\": \"<string>\",\n      \"message\": \"<string>\",\n      \"value\": {}\n    },\n    {\n      \"location\": \"<string>\",\n      \"message\": \"<string>\",\n      \"value\": {}\n    }\n  ],\n  \"instance\": \"<uri>\",\n  \"status\": \"<long>\",\n  \"title\": \"<string>\",\n  \"type\": \"about:blank\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "comments_updated Event",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "XXX"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resource\": \"aftercall\",\n  \"event\": \"comments_updated\",\n  \"timestamp\": \"2025-04-11T10:00:00Z\",\n  \"data\": {\n    \"call_id\": 1234567890987654400,\n    \"channel_id\": 123456789,\n    \"tags\": [\"tag1\", \"tag2\"],\n    \"comments\": \"Valid comment\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}ringover/webhooks",
+          "host": ["{{baseUrl}}ringover"],
+          "path": ["webhooks"]
+        },
+        "description": "Push a Ringover Webhook for comments_updated event"
+      },
+      "response": []
+    },
+    {
+      "name": "tags_updated Event",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "XXX"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resource\": \"aftercall\",\n  \"event\": \"tags_updated\",\n  \"timestamp\": \"2025-04-11T10:00:00Z\",\n  \"data\": {\n    \"call_id\": 1234567890987654400,\n    \"tags\": [\"tag1\"]\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}ringover/webhooks",
+          "host": ["{{baseUrl}}ringover"],
+          "path": ["webhooks"]
+        },
+        "description": "Push a Ringover Webhook for tags_updated event"
+      },
+      "response": []
+    },
+    {
+      "name": "record_available Event",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "XXX"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resource\": \"aftercall\",\n  \"event\": \"record_available\",\n  \"timestamp\": \"2025-04-11T10:00:00Z\",\n  \"data\": {\n    \"call_id\": 1234567890987654400,\n    \"record_link\": \"https://example.com/record.mp3\",\n    \"record_duration\": \"30s\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}ringover/webhooks",
+          "host": ["{{baseUrl}}ringover"],
+          "path": ["webhooks"]
+        },
+        "description": "Push a Ringover Webhook for record_available event"
+      },
+      "response": []
+    },
+    {
+      "name": "voicemail_available Event",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "XXX"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resource\": \"aftercall\",\n  \"event\": \"voicemail_available\",\n  \"timestamp\": \"2025-04-11T10:00:00Z\",\n  \"data\": {\n    \"call_id\": 1234567890987654400,\n    \"voicemail_link\": \"https://example.com/voicemail.mp3\",\n    \"voicemail_duration\": \"30s\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}ringover/webhooks",
+          "host": ["{{baseUrl}}ringover"],
+          "path": ["webhooks"]
+        },
+        "description": "Push a Ringover Webhook for voicemail_available event"
+      },
+      "response": []
+    },
+    {
+      "name": "ringing Event",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "XXX"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resource\": \"call\",\n  \"event\": \"ringing\",\n  \"timestamp\": \"2025-04-11T10:00:00Z\",\n  \"data\": {\n    \"id\": \"57622f20-a020-4f9e-814c-62a6123412fa\",\n    \"call_id\": 1234567890987654400,\n    \"channel_id\": 123456789,\n    \"start_time\": 1554823493.762305,\n    \"direction\": \"inbound\",\n    \"from_number\": \"33123456789\",\n    \"to_number\": \"33123456789\",\n    \"user_id\": 12345678,\n    \"is_internal\": 1,\n    \"is_anonymous\": 0,\n    \"is_ivr\": 1,\n    \"ivr_data\": {},\n    \"user\": {\n      \"user_id\": 123456789,\n      \"firstname\": \"Jean\",\n      \"lastname\": \"Dupont\",\n      \"email\": \"jean.dupont@ringover.com\",\n      \"photo\": \"https://cdn.ringover.com/img/users/default.jpg\"\n    },\n    \"status\": \"ringing\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}ringover/webhooks",
+          "host": ["{{baseUrl}}ringover"],
+          "path": ["webhooks"]
+        },
+        "description": "Push a Ringover Webhook for ringing event"
+      },
+      "response": []
+    },
+    {
+      "name": "sent Event",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "XXX"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resource\": \"sms\",\n  \"event\": \"sent\",\n  \"timestamp\": \"2025-04-11T10:00:00Z\",\n  \"data\": {\n    \"id\": \"1234567-234567\",\n    \"message_id\": 1234567,\n    \"conversation_id\": 234567,\n    \"time\": 1554823493,\n    \"direction\": \"inbound\",\n    \"from_number\": 33123456789,\n    \"to_number\": 33123456789,\n    \"body\": \"My SMS content...\",\n    \"is_internal\": true,\n    \"is_collaborative\": false,\n    \"user_id\": 1234567890987654400\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}ringover/webhooks",
+          "host": ["{{baseUrl}}ringover"],
+          "path": ["webhooks"]
+        },
+        "description": "Push a Ringover Webhook for sent event"
+      },
+      "response": []
+    },
+    {
+      "name": "ivr_response_code Event",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "XXX"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resource\": \"call\",\n  \"event\": \"ivr_response_code\",\n  \"timestamp\": \"2025-04-11T10:00:00Z\",\n  \"data\": {\n    \"code\": 1234,\n    \"from_number\": \"33123456789\",\n    \"to_number\": \"33123456789\",\n    \"direction\": \"inbound\",\n    \"call_id\": 1234567890987654400\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}ringover/webhooks",
+          "host": ["{{baseUrl}}ringover"],
+          "path": ["webhooks"]
+        },
+        "description": "Push a Ringover Webhook for ivr_response_code event"
+      },
+      "response": []
+    },
+    {
+      "name": "contact Event",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "XXX"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resource\": \"call\",\n  \"event\": \"contact\",\n  \"timestamp\": \"2025-04-11T10:00:00Z\",\n  \"data\": {\n    \"call_id\": 1234567890987654400,\n    \"direction\": \"inbound\",\n    \"from_number\": \"33123456789\",\n    \"to_number\": \"33123456789\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}ringover/webhooks",
+          "host": ["{{baseUrl}}ringover"],
+          "path": ["webhooks"]
+        },
+        "description": "Push a Ringover Webhook for contact event"
+      },
+      "response": []
+    },
+    {
+      "name": "contact search Event",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "XXX"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resource\": \"search\",\n  \"event\": \"contact\",\n  \"timestamp\": \"2025-04-11T10:00:00Z\",\n  \"data\": {\n    \"query_search\": \"search query\",\n    \"user_id\": 123456\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}ringover/webhooks",
+          "host": ["{{baseUrl}}ringover"],
+          "path": ["webhooks"]
+        },
+        "description": "Push a Ringover Webhook for contact search event"
+      },
+      "response": []
+    },
+    {
+      "name": "smart routing Event",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "XXX"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resource\": \"call\",\n  \"event\": \"routing\",\n  \"timestamp\": \"2025-04-11T10:00:00Z\",\n  \"data\": {\n    \"call_id\": 1234567890987654400,\n    \"direction\": \"inbound\",\n    \"from_number\": 33123456789,\n    \"to_number\": 33123456789\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}ringover/webhooks",
+          "host": ["{{baseUrl}}ringover"],
+          "path": ["webhooks"]
+        },
+        "description": "Push a Ringover Webhook for smart routing event"
+      },
+      "response": []
+    },
+    {
+      "name": "Valid answered Event",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "XXX"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resource\": \"call\",\n  \"event\": \"answered\",\n  \"timestamp\": \"2025-04-11T10:00:00Z\",\n  \"data\": {\n    \"id\": \"57622f20-a020-4f9e-814c-62a6123412fa\",\n    \"call_id\": 1234567890987654400,\n    \"channel_id\": 123456789,\n    \"start_time\": 1554823493.762305,\n    \"direction\": \"inbound\",\n    \"from_number\": \"33123456789\",\n    \"to_number\": \"33123456789\",\n    \"user_id\": 12345678,\n    \"is_internal\": 1,\n    \"is_anonymous\": 0,\n    \"is_ivr\": 1,\n    \"ivr_data\": {},\n    \"user\": {\n      \"user_id\": 123456789,\n      \"firstname\": \"Jean\",\n      \"lastname\": \"Dupont\",\n      \"email\": \"jean.dupont@ringover.com\",\n      \"photo\": \"https://cdn.ringover.com/img/users/default.jpg\"\n    },\n    \"status\": \"answered\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}ringover/webhooks",
+          "host": ["{{baseUrl}}ringover"],
+          "path": ["webhooks"]
+        },
+        "description": "Push a Ringover Webhook for answered event"
+      },
+      "response": []
+    },
+    {
+      "name": "Valid hangup Event",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "XXX"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resource\": \"call\",\n  \"event\": \"hangup\",\n  \"timestamp\": \"2025-04-11T10:00:00Z\",\n  \"data\": {\n    \"id\": \"57622f20-a020-4f9e-814c-62a6123412fa\",\n    \"call_id\": 1234567890987654400,\n    \"channel_id\": 123456789,\n    \"start_time\": 1554823493.762305,\n    \"hangup_time\": 1554823442.762305,\n    \"duration_in_seconds\": 32,\n    \"direction\": \"inbound\",\n    \"from_number\": \"33123456789\",\n    \"to_number\": \"33123456789\",\n    \"user_id\": 12345678,\n    \"is_internal\": 1,\n    \"is_anonymous\": 0,\n    \"is_ivr\": 1,\n    \"ivr_data\": {},\n    \"user\": {\n      \"user_id\": 123456789,\n      \"firstname\": \"Jean\",\n      \"lastname\": \"Dupont\",\n      \"email\": \"jean.dupont@ringover.com\",\n      \"photo\": \"https://cdn.ringover.com/img/users/default.jpg\"\n    },\n    \"status\": \"hangup\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}ringover/webhooks",
+          "host": ["{{baseUrl}}ringover"],
+          "path": ["webhooks"]
+        },
+        "description": "Push a Ringover Webhook for hangup event"
+      },
+      "response": []
+    },
+    {
+      "name": "Valid missed Event",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "XXX"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resource\": \"call\",\n  \"event\": \"missed\",\n  \"timestamp\": \"2025-04-11T10:00:00Z\",\n  \"data\": {\n    \"id\": \"57622f20-a020-4f9e-814c-62a6123412fa\",\n    \"call_id\": 1234567890987654400,\n    \"channel_id\": 123456789,\n    \"start_time\": 1554823493.762305,\n    \"direction\": \"inbound\",\n    \"from_number\": \"33123456789\",\n    \"to_number\": \"33123456789\",\n    \"user_id\": 12345678,\n    \"is_internal\": 1,\n    \"is_anonymous\": 0,\n    \"is_ivr\": 1,\n    \"ivr_data\": {},\n    \"user\": {\n      \"user_id\": 123456789,\n      \"firstname\": \"Jean\",\n      \"lastname\": \"Dupont\",\n      \"email\": \"jean.dupont@ringover.com\",\n      \"photo\": \"https://cdn.ringover.com/img/users/default.jpg\"\n    },\n    \"status\": \"missed\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}ringover/webhooks",
+          "host": ["{{baseUrl}}ringover"],
+          "path": ["webhooks"]
+        },
+        "description": "Push a Ringover Webhook for missed event"
+      },
+      "response": []
+    },
+    {
+      "name": "Valid voicemail Event",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "XXX"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resource\": \"call\",\n  \"event\": \"voicemail\",\n  \"timestamp\": \"2025-04-11T10:00:00Z\",\n  \"data\": {\n    \"id\": \"57622f20-a020-4f9e-814c-62a6123412fa\",\n    \"call_id\": 1234567890987654400,\n    \"channel_id\": 123456789,\n    \"start_time\": 1554823493.762305,\n    \"direction\": \"inbound\",\n    \"from_number\": \"33123456789\",\n    \"to_number\": \"33123456789\",\n    \"user_id\": 12345678,\n    \"is_internal\": 1,\n    \"is_anonymous\": 0,\n    \"is_ivr\": 1,\n    \"ivr_data\": {},\n    \"user\": {\n      \"user_id\": 123456789,\n      \"firstname\": \"Jean\",\n      \"lastname\": \"Dupont\",\n      \"email\": \"jean.dupont@ringover.com\",\n      \"photo\": \"https://cdn.ringover.com/img/users/default.jpg\"\n    },\n    \"status\": \"voicemail\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}ringover/webhooks",
+          "host": ["{{baseUrl}}ringover"],
+          "path": ["webhooks"]
+        },
+        "description": "Push a Ringover Webhook for voicemail event"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "/",
+      "type": "string"
+    }
+  ]
+}

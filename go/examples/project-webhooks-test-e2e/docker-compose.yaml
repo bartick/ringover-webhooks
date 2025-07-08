@@ -1,0 +1,250 @@
+name: ringoverwebhooks
+
+services:
+  db:
+    image: mariadb:11.7
+    environment:
+      MARIADB_ROOT_PASSWORD: ${WEBHOOKS_DB_PASSWORD}
+      MARIADB_USER: ${WEBHOOKS_DB_USERNAME}
+      MARIADB_PASSWORD: ${WEBHOOKS_DB_PASSWORD}
+      MARIADB_DATABASE: ${WEBHOOKS_DB_DATABASE}
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "127.0.0.1:${WEBHOOKS_DB_HOST_PORT}:${WEBHOOKS_DB_SVC_PORT}/tcp"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mariadb-admin",
+          "--host=localhost",
+          "--password=${WEBHOOKS_DB_PASSWORD}",
+          "--connect_timeout=1",
+          "--wait=3",
+          "ping",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+      start_interval: 5s
+    restart: unless-stopped
+    stop_grace_period: 3s
+    profiles:
+      - all
+      - db
+
+  db-setup:
+    build:
+      dockerfile_inline: |
+        FROM arigaio/atlas:0.32.0-community-alpine
+        RUN apk add bash mariadb-client
+        WORKDIR /app
+        RUN mkdir -p /app/data/db-schemas
+        COPY  ./pkg/repositories/persistence/persmysql/persmysql_sqlc_src/schema.sql \
+              /app/data/db-schemas/schema.sql
+    entrypoint: ["bash"]
+    command: |
+      -x -c '
+        set -e;
+        sleep 5;
+        mariadb-admin \
+          --verbose \
+          --protocol=tcp \
+          --host=${WEBHOOKS_DB_SVC_NAME} \
+          --port=${WEBHOOKS_DB_SVC_PORT} \
+          --password=${WEBHOOKS_DB_PASSWORD} \
+          --connect_timeout=5 \
+          --wait=10 \
+          ping \
+          ;
+        # Setup of dev database for atlas
+        set +e;
+        mariadb-admin \
+          --verbose \
+          --force \
+          --protocol=tcp \
+          --host=${WEBHOOKS_DB_SVC_NAME} \
+          --port=${WEBHOOKS_DB_SVC_PORT} \
+          --password=${WEBHOOKS_DB_PASSWORD} \
+          drop \
+          ${WEBHOOKS_DB_DATABASE}-dev \
+          ;
+        set -e;
+        mariadb-admin \
+          --verbose \
+          --force \
+          --protocol=tcp \
+          --host=${WEBHOOKS_DB_SVC_NAME} \
+          --port=${WEBHOOKS_DB_SVC_PORT} \
+          --password=${WEBHOOKS_DB_PASSWORD} \
+          create \
+          ${WEBHOOKS_DB_DATABASE}-dev \
+          ;
+        # Check difference between current schemas and expected schemas
+        export ATLAS_NO_UPGRADE_SUGGESTIONS=1;
+        atlas schema diff \
+          --from "mysql://${WEBHOOKS_DB_USERNAME}:${WEBHOOKS_DB_PASSWORD}@${WEBHOOKS_DB_SVC_NAME}:${WEBHOOKS_DB_SVC_PORT}/${WEBHOOKS_DB_DATABASE}" \
+          --to file:///app/data/db-schemas/schema.sql \
+          --dev-url "mysql://root:${WEBHOOKS_DB_PASSWORD}@${WEBHOOKS_DB_SVC_NAME}:${WEBHOOKS_DB_SVC_PORT}/${WEBHOOKS_DB_DATABASE}-dev" \
+          ;
+        # Delete potential previous schemas
+        atlas schema clean \
+          --auto-approve \
+          --url "mysql://${WEBHOOKS_DB_USERNAME}:${WEBHOOKS_DB_PASSWORD}@${WEBHOOKS_DB_SVC_NAME}:${WEBHOOKS_DB_SVC_PORT}/${WEBHOOKS_DB_DATABASE}" \
+          ;
+        # Migrate the database towards the expected schemas
+        atlas schema apply \
+          --auto-approve \
+          --url "mysql://${WEBHOOKS_DB_USERNAME}:${WEBHOOKS_DB_PASSWORD}@${WEBHOOKS_DB_SVC_NAME}:${WEBHOOKS_DB_SVC_PORT}/${WEBHOOKS_DB_DATABASE}" \
+          --to file:///app/data/db-schemas/schema.sql \
+          --dev-url "mysql://root:${WEBHOOKS_DB_PASSWORD}@${WEBHOOKS_DB_SVC_NAME}:${WEBHOOKS_DB_SVC_PORT}/${WEBHOOKS_DB_DATABASE}-dev" \
+          ;
+        # Check expected schemas
+        atlas schema diff \
+          --from "mysql://${WEBHOOKS_DB_USERNAME}:${WEBHOOKS_DB_PASSWORD}@${WEBHOOKS_DB_SVC_NAME}:${WEBHOOKS_DB_SVC_PORT}/${WEBHOOKS_DB_DATABASE}" \
+          --to file:///app/data/db-schemas/schema.sql \
+          --dev-url "mysql://root:${WEBHOOKS_DB_PASSWORD}@${WEBHOOKS_DB_SVC_NAME}:${WEBHOOKS_DB_SVC_PORT}/${WEBHOOKS_DB_DATABASE}-dev" \
+          ;
+      '
+    #volumes:
+    #  - ./pkg/repositories/persistence/persmysql/persmysql_sqlc_src/schema.sql:/schemas/schema.sql:ro
+    #  - ./pkg/repositories/persistence/persmysql/persmysql_sqlc_src/migrations/:/migrations:rw
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: false
+    restart: "no"
+    stop_grace_period: 0s
+    profiles:
+      - all
+      - db
+
+  db-shell:
+    build:
+      dockerfile_inline: |
+        FROM python:3.12-alpine
+        RUN pip install mycli
+    entrypoint: ["mycli"]
+    command:
+      [
+        "mysql://${WEBHOOKS_DB_USERNAME}:${WEBHOOKS_DB_PASSWORD}@${WEBHOOKS_DB_SVC_NAME}:${WEBHOOKS_DB_SVC_PORT}/${WEBHOOKS_DB_DATABASE}",
+      ]
+    #environment:
+    #  WEBHOOKS_DB_USERNAME: ${WEBHOOKS_DB_USERNAME}
+    #  WEBHOOKS_DB_PASSWORD: ${WEBHOOKS_DB_PASSWORD}
+    #  WEBHOOKS_DB_DATABASE: ${WEBHOOKS_DB_DATABASE}
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+    logging:
+      driver: none
+    stop_grace_period: 0s
+    profiles:
+      - all
+      - db
+
+  backend-test:
+    image: postman/newman:6.1.3-alpine
+    build:
+      dockerfile_inline: |
+        FROM postman/newman:6.1.3-alpine
+        RUN apk add bash
+        COPY ./Ringover Webhooks Collector API.postman_collection.json /ringover-webhooks-test.postman_collection.json
+    command: "--help"
+    # https://hub.docker.com/r/postman/newman
+    #volumes:
+    #  - ./Ringover Webhooks Collector API.postman_collection.json:/ringover-webhooks-test.postman_collection.json:ro
+    depends_on:
+      backend:
+        condition: service_healthy
+        restart: false
+    restart: "no"
+    stop_grace_period: 0s
+    profiles:
+      - all
+      - test
+
+  backend:
+    image: ringover/webhooks-collector
+    build:
+      context: ../..
+      dockerfile_inline: |
+        # syntax=docker/dockerfile:1
+        FROM golang:1.24.1 AS builder
+        ENV CGO_ENABLED=0
+        ENV GODEBUG=installgoroot=all
+        WORKDIR /src
+        RUN --mount=type=cache,target=/root/.cache/go-build \
+          go build std
+        COPY mods /src/mods
+        COPY examples/project-webhooks-test-e2e/go.mod examples/project-webhooks-test-e2e/go.sum /src/examples/project-webhooks-test-e2e/
+        RUN --mount=type=cache,target=/root/.cache/go-build \
+          cd examples/project-webhooks-test-e2e && \
+          go mod download -x
+        COPY examples/project-webhooks-test-e2e /src/examples/project-webhooks-test-e2e/
+        RUN --mount=type=cache,target=/root/.cache/go-build \
+          cd examples/project-webhooks-test-e2e && \
+          go build -v -o /ringover-webhooks-collector ./cmd/ringover-webhooks-collector/
+        #
+        #FROM scratch
+        FROM gcr.io/distroless/static-debian12
+        WORKDIR /app
+        COPY --from=builder /ringover-webhooks-collector /app/ringover-webhooks-collector
+        ENTRYPOINT ["/app/ringover-webhooks-collector"]
+    environment:
+      WEBHOOKS_DB_URL: ${WEBHOOKS_DB_USERNAME}:${WEBHOOKS_DB_PASSWORD}@tcp(${WEBHOOKS_DB_SVC_NAME}:${WEBHOOKS_DB_SVC_PORT})/${WEBHOOKS_DB_DATABASE}
+      WEBHOOKS_CALL_EVENT_KEY: ${WEBHOOKS_CALL_EVENT_KEY}
+      WEBHOOKS_CONTACT_CALL_KEY: ${WEBHOOKS_CONTACT_CALL_KEY}
+      WEBHOOK_CONTACT_SEARCH_KEY: ${WEBHOOK_CONTACT_SEARCH_KEY}
+      WEBHOOKS_CALL_ROUTING_KEY: ${WEBHOOKS_CALL_ROUTING_KEY}
+    ports:
+      - "127.0.0.1:16080:16080/tcp"
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+      db-setup:
+        condition: service_completed_successfully
+        restart: false
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:16080"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    develop:
+      # Use developer watch: https://docs.docker.com/compose/how-tos/file-watch/#rebuild
+      watch:
+        - action: rebuild
+          path: .
+          #include: "*.go"
+    restart: unless-stopped
+    tty: true
+    stop_grace_period: 0s
+
+  postman-tests:
+    image: postman/newman:6.1.3-alpine
+    depends_on:
+      backend:
+        condition: service_healthy
+    volumes:
+      - ./Ringover Webhooks Collector API.postman_collection.json:/etc/newman/RingoverWebhooksCollection.postman_collection.json:ro
+    command:
+      [
+        "run",
+        "/etc/newman/RingoverWebhooksCollection.postman_collection.json",
+        "--env-var",
+        "baseUrl=http://backend:16080/",
+        "--reporters",
+        "cli",
+      ]
+    profiles:
+      - test
+
+volumes:
+  db_data:
