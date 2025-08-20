@@ -3,6 +3,7 @@ const { z } = require("zod");
 const ringoverService = require("../services/ringover.service");
 
 const { MessageEvent, CallRingingEvent, CallAnsweredEvent, CallHangupEvent, CallMissedEvent, CallVoicemailEvent, CommentUpdatedEvent, TagUpdatedEvent, RecordAvailableEvent, VoicemailAvailableEvent, ContractEvent, ContractSearchEvent, IVRResponseEvent, SmartRoutingEvent } = require('../zod/ringover.zod');
+const logger = require("../utils/logger");
 
 const handleMessageWebhooks = async (req, res) => {
   try {
@@ -13,10 +14,10 @@ const handleMessageWebhooks = async (req, res) => {
     res.status(200).send();
   } catch (err) {
     if (err instanceof z.ZodError) {
-      console.log("ZodError: ", JSON.stringify(JSON.parse(err.message), null, 2));
+      logger.error("ZodError: " + JSON.stringify(JSON.parse(err.message), null, 2));
       res.status(400).json({ error: JSON.parse(err.message) });
     } else {
-      console.log("Message Webhook error: ", err);
+      logger.error("Message Webhook error: " + JSON.stringify(err, null, 2));
       res.status(400).send("Invalid MessageEvent");
     }
   }
@@ -31,10 +32,10 @@ const handleCallRingingWebhooks = async (req, res) => {
     res.status(200).send();
   } catch (err) {
     if (err instanceof z.ZodError) {
-      console.log("ZodError: ", JSON.stringify(JSON.parse(err.message), null, 2));
+      logger.error("ZodError: " + JSON.stringify(JSON.parse(err.message), null, 2));
       res.status(400).json({ error: JSON.parse(err.message) });
     } else {
-      console.log("Call Ringing Webhook error: ", err);
+      logger.error("Call Ringing Webhook error: " + JSON.stringify(err, null, 2));
       res.status(400).send("Invalid CallRingingEvent");
     }
   }
@@ -49,10 +50,10 @@ const handleCallAnsweredWebhooks = async (req, res) => {
     res.status(200).send();
   } catch (err) {
     if (err instanceof z.ZodError) {
-      console.log("ZodError: ", JSON.stringify(JSON.parse(err.message), null, 2));
+      logger.error("ZodError: " + JSON.stringify(JSON.parse(err.message), null, 2));
       res.status(400).json({ error: JSON.parse(err.message) });
     } else {
-      console.log("Call Answered Webhook error: ", err);
+      logger.error("Call Answered Webhook error: " + JSON.stringify(err, null, 2));
       res.status(400).send("Invalid CallAnsweredEvent");
     }
   }
@@ -67,10 +68,10 @@ const handleCallHangupWebhooks = async (req, res) => {
     res.status(200).send();
   } catch (err) {
     if (err instanceof z.ZodError) {
-      console.log("ZodError: ", JSON.stringify(JSON.parse(err.message), null, 2));
+      logger.error("ZodError: " + JSON.stringify(JSON.parse(err.message), null, 2));
       res.status(400).json({ error: JSON.parse(err.message) });
     } else {
-      console.log("Call Hangup Webhook error: ", err);
+      logger.error("Call Hangup Webhook error: " + JSON.stringify(err, null, 2));
       res.status(400).send("Invalid CallHangupEvent");
     }
   }
@@ -85,10 +86,10 @@ const handleCallMissedWebhooks = async (req, res) => {
     res.status(200).send();
   } catch (err) {
     if (err instanceof z.ZodError) {
-      console.log("ZodError: ", JSON.stringify(JSON.parse(err.message), null, 2));
+      logger.error("ZodError: " + JSON.stringify(JSON.parse(err.message), null, 2));
       res.status(400).json({ error: JSON.parse(err.message) });
     } else {
-      console.log("Call Missed Webhook error: ", err);
+      logger.error("Call Missed Webhook error: " + JSON.stringify(err, null, 2));
       res.status(400).send("Invalid CallMissedEvent");
     }
   }
@@ -103,10 +104,10 @@ const handleCallVoicemailWebhooks = async (req, res) => {
     res.status(200).send();
   } catch (err) {
     if (err instanceof z.ZodError) {
-      console.log("ZodError: ", JSON.stringify(JSON.parse(err.message), null, 2));
+      logger.error("ZodError: " + JSON.stringify(JSON.parse(err.message), null, 2));
       res.status(400).json({ error: JSON.parse(err.message) });
     } else {
-      console.log("Call Voicemail Webhook error: ", err);
+      logger.error("Call Voicemail Webhook error: " + JSON.stringify(err, null, 2));
       res.status(400).send("Invalid CallVoicemailEvent");
     }
   }
@@ -121,10 +122,10 @@ const handleCallCommentsUpdatedWebhooks = async (req, res) => {
     res.status(200).send();
   } catch (err) {
     if (err instanceof z.ZodError) {
-      console.log("ZodError: ", JSON.stringify(JSON.parse(err.message), null, 2));
+      logger.error("ZodError: " + JSON.stringify(JSON.parse(err.message), null, 2));
       res.status(400).json({ error: JSON.parse(err.message) });
     } else {
-      console.log("Comment Updated Webhook error: ", err);
+      logger.error("Comment Updated Webhook error: " + JSON.stringify(err, null, 2));
       res.status(400).send("Invalid CommentUpdatedEvent");
     }
   }
@@ -139,10 +140,10 @@ const handleCallTagsUpdatedWebhooks = async (req, res) => {
     res.status(200).send();
   } catch (err) {
     if (err instanceof z.ZodError) {
-      console.log("ZodError: ", JSON.stringify(JSON.parse(err.message), null, 2));
+      logger.error("ZodError: " + JSON.stringify(JSON.parse(err.message), null, 2));
       res.status(400).json({ error: JSON.parse(err.message) });
     } else {
-      console.log("Tag Updated Webhook error: ", err);
+      logger.error("Tag Updated Webhook error: " + JSON.stringify(err, null, 2));
       res.status(400).send("Invalid TagUpdatedEvent");
     }
   }
@@ -157,10 +158,10 @@ const handleCallRecordAvailableWebhooks = async (req, res) => {
     res.status(200).send();
   } catch (err) {
     if (err instanceof z.ZodError) {
-      console.log("ZodError: ", JSON.stringify(JSON.parse(err.message), null, 2));
+      logger.error("ZodError: " + JSON.stringify(JSON.parse(err.message), null, 2));
       res.status(400).json({ error: JSON.parse(err.message) });
     } else {
-      console.log("Record Available Webhook error: ", err);
+      logger.error("Record Available Webhook error: " + JSON.stringify(err, null, 2));
       res.status(400).send("Invalid RecordAvailableEvent");
     }
   }
@@ -175,10 +176,10 @@ const handleCallVoicemailAvailableWebhooks = async (req, res) => {
     res.status(200).send();
   } catch (err) {
     if (err instanceof z.ZodError) {
-      console.log("ZodError: ", JSON.stringify(JSON.parse(err.message), null, 2));
+      logger.error("ZodError: " + JSON.stringify(JSON.parse(err.message), null, 2));
       res.status(400).json({ error: JSON.parse(err.message) });
     } else {
-      console.log("Call Voicemail Available Webhook error: ", err);
+      logger.error("Call Voicemail Available Webhook error: " + JSON.stringify(err, null, 2));
       res.status(400).send("Invalid VoicemailAvailableEvent");
     }
   }
@@ -193,10 +194,10 @@ const handleContactWebhooks = async (req, res) => {
     res.status(200).send(response);
   } catch (err) {
     if (err instanceof z.ZodError) {
-      console.log("ZodError: ", JSON.stringify(JSON.parse(err.message), null, 2));
+      logger.error("ZodError: " + JSON.stringify(JSON.parse(err.message), null, 2));
       res.status(400).json({ error: JSON.parse(err.message) });
     } else {
-      console.error("Contact webhook error:", err);
+      logger.error("Contact webhook error: " + JSON.stringify(err, null, 2));
       res.status(500).send("Internal Server Error");
     }
   }
@@ -211,10 +212,10 @@ const handleContactSearchWebhooks = async (req, res) => {
     res.status(200).send(response);
   } catch (err) {
     if (err instanceof z.ZodError) {
-      console.log("ZodError: ", JSON.stringify(JSON.parse(err.message), null, 2));
+      logger.error("ZodError: " + JSON.stringify(JSON.parse(err.message), null, 2));
       res.status(400).json({ error: JSON.parse(err.message) });
     } else {
-      console.error("Contact search webhook error:", err);
+      logger.error("Contact search webhook error: " + JSON.stringify(err, null, 2));
       res.status(500).send("Internal Server Error");
     }
   }
@@ -229,10 +230,10 @@ const handleIvrWebhooks = async (req, res) => {
     res.status(200).send();
   } catch (err) {
     if (err instanceof z.ZodError) {
-      console.log("ZodError: ", JSON.stringify(JSON.parse(err.message), null, 2));
+      logger.error("ZodError: " + JSON.stringify(JSON.parse(err.message), null, 2));
       res.status(400).json({ error: JSON.parse(err.message) });
     } else {
-      console.error("IVR webhook error:", err);
+      logger.error("IVR webhook error: " + JSON.stringify(err, null, 2));
       res.status(500).send("Internal Server Error");
     }
   }
@@ -247,10 +248,10 @@ const handleSmartRoutingWebhooks = async (req, res) => {
     res.status(200).send(response);
   } catch (err) {
     if (err instanceof z.ZodError) {
-      console.log("ZodError: ", JSON.stringify(JSON.parse(err.message), null, 2));
+      logger.error("ZodError: " + JSON.stringify(JSON.parse(err.message), null, 2));
       res.status(400).json({ error: JSON.parse(err.message) });
     } else {
-      console.error("SmartRouting webhook error:", err);
+      logger.error("SmartRouting webhook error: " + JSON.stringify(err, null, 2));
       res.status(500).send("Internal Server Error");
     }
   }

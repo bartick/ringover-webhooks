@@ -1,8 +1,9 @@
 const { insertIntoDatabase } = require("../repository/webhook.repository");
+const logger = require("../utils/logger");
 
 const messageWebhookService = async (app, data) => {
   // Business logic for message webhook
-  console.log("Message webhook:", data);
+  logger.debug("Message webhook: " + JSON.stringify(data, null, 2));
   // Do some database operation
   if (app.get("db")) {
     await insertIntoDatabase("Webhook Message", data.event, data.resource, data.timestamp, data.data, data.attempt);
@@ -11,7 +12,7 @@ const messageWebhookService = async (app, data) => {
 
 const callRingingWebhookService = async (app, data) => {
   // Business logic for call ringing webhook
-  console.log("CallRingingEvent: ", data);
+  logger.debug("CallRingingEvent: " + JSON.stringify(data, null, 2));
   // Do some database operation
   if (app.get("db")) {
     await insertIntoDatabase("Webhook Call Ringing", data.event, data.resource, data.timestamp, data.data, data.attempt);
@@ -20,7 +21,7 @@ const callRingingWebhookService = async (app, data) => {
 
 const callAnsweredWebhookService = async (app, data) => {
   // Business logic for call answered webhook
-  console.log("CallAnsweredEvent: ", data);
+  logger.debug("CallAnsweredEvent: " + JSON.stringify(data, null, 2));
   // Do some database operation
   if (app.get("db")) {
     await insertIntoDatabase("Webhook Call Answered", data.event, data.resource, data.timestamp, data.data, data.attempt);
@@ -29,7 +30,7 @@ const callAnsweredWebhookService = async (app, data) => {
 
 const callHangupWebhookService = async (app, data) => {
   // Business logic for call hangup webhook
-  console.log("CallHangupEvent: ", data);
+  logger.debug("CallHangupEvent: " + JSON.stringify(data, null, 2));
   // Do some database operation
   if (app.get("db")) {
     await insertIntoDatabase("Webhook Call Hangup", data.event, data.resource, data.timestamp, data.data, data.attempt);
@@ -38,7 +39,7 @@ const callHangupWebhookService = async (app, data) => {
 
 const callMissedWebhookService = async (app, data) => {
   // Business logic for call missed webhook
-  console.log("CallMissedEvent: ", data);
+  logger.debug("CallMissedEvent: " + JSON.stringify(data, null, 2));
   // Do some database operation
   if (app.get("db")) {
     await insertIntoDatabase("Webhook Call Missed", data.event, data.resource, data.timestamp, data.data, data.attempt);
@@ -47,7 +48,7 @@ const callMissedWebhookService = async (app, data) => {
 
 const callVoicemailWebhookService = async (app, data) => {
   // Business logic for call voicemail webhook
-  console.log("CallVoicemailEvent: ", data);
+  logger.debug("CallVoicemailEvent: " + JSON.stringify(data, null, 2));
   // Do some database operation
   if (app.get("db")) {
     await insertIntoDatabase("Webhook Call Voicemail", data.event, data.resource, data.timestamp, data.data, data.attempt);
@@ -56,7 +57,7 @@ const callVoicemailWebhookService = async (app, data) => {
 
 const callCommentsUpdatedWebhookService = async (app, data) => {
   // Business logic for call comments updated webhook
-  console.log("CallCommentsUpdatedEvent: ", data);
+  logger.debug("CallCommentsUpdatedEvent: " + JSON.stringify(data, null, 2));
   // Do some database operation
   if (app.get("db")) {
     await insertIntoDatabase("Webhook Call Comments Updated", data.event, data.resource, data.timestamp, data.data, data.attempt);
@@ -65,7 +66,7 @@ const callCommentsUpdatedWebhookService = async (app, data) => {
 
 const callTagsUpdatedWebhookService = async (app, data) => {
   // Business logic for call tags updated webhook
-  console.log("CallTagsUpdatedEvent: ", data);
+  logger.debug("CallTagsUpdatedEvent: " + JSON.stringify(data, null, 2));
   // Do some database operation
   if (app.get("db")) {
     await insertIntoDatabase("Webhook Call Tags Updated", data.event, data.resource, data.timestamp, data.data, data.attempt);
@@ -74,7 +75,7 @@ const callTagsUpdatedWebhookService = async (app, data) => {
 
 const callRecordAvailableWebhookService = async (app, data) => {
   // Business logic for call record available webhook
-  console.log("CallRecordAvailableEvent: ", data);
+  logger.debug("CallRecordAvailableEvent: " + JSON.stringify(data, null, 2));
   // Do some database operation
   if (app.get("db")) {
     await insertIntoDatabase("Webhook Call Record Available", data.event, data.resource, data.timestamp, data.data, data.attempt);
@@ -83,7 +84,7 @@ const callRecordAvailableWebhookService = async (app, data) => {
 
 const callVoicemailAvailableWebhookService = async (app, data) => {
   // Business logic for call voicemail available webhook
-  console.log("CallVoicemailAvailableEvent: ", data);
+  logger.debug("CallVoicemailAvailableEvent: " + JSON.stringify(data, null, 2));
   // Do some database operation
   if (app.get("db")) {
     await insertIntoDatabase("Webhook Call Voicemail Available", data.event, data.resource, data.timestamp, data.data, data.attempt);
@@ -92,7 +93,7 @@ const callVoicemailAvailableWebhookService = async (app, data) => {
 
 const handleContact = async (app, data) => {
   // Business logic for contact webhook
-  console.log("Contact webhook:", data);
+  logger.debug("Contact webhook:" + JSON.stringify(data, null, 2));
 
   // Do some database operation
   if (app.get("db")) {
@@ -118,7 +119,7 @@ const handleContact = async (app, data) => {
 
 const handleContactSearch = async (app, data) => {
   // Business logic for search webhook
-  console.log("Search webhook:", data);
+  logger.debug("Search webhook:" + JSON.stringify(data, null, 2));
 
   // Do some database operation
   if (app.get("db")) {
@@ -145,7 +146,7 @@ const handleContactSearch = async (app, data) => {
 
 const handleIvr = async (app, data) => {
   // Business logic for IVR response webhook
-  console.log("IVRResponseEvent: ", data);
+  logger.debug("IVRResponseEvent: " + JSON.stringify(data, null, 2));
   // Do some database operation
   if (app.get("db")) {
     await insertIntoDatabase("Webhook IVR Response", data.event, data.resource, data.timestamp, data.data, data.attempt);
@@ -154,7 +155,7 @@ const handleIvr = async (app, data) => {
 
 const handleSmartRouting = async (app, data) => {
   // Business logic for smart routing webhook
-  console.log("SmartRouting webhook:", data);
+  logger.debug("SmartRouting webhook:" + JSON.stringify(data, null, 2));
 
   // Do some database operation
   if (app.get("db")) {

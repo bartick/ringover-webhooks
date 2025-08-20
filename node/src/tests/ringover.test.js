@@ -388,7 +388,6 @@ describe("Contact Call", () => {
             });
 
 
-        console.log(res.body);
         expect(res.statusCode).toBe(400);
         expect(res.body).toEqual({
             error: [
@@ -485,7 +484,6 @@ describe("Smart Routing and IVR Code", () => {
     const ringoverAuthorization = jwt.sign({ foo: "bar" }, RINGOVER_SECRET_SMART_ROUTING_AND_IVR_CODE, { algorithm: "HS512" });
 
     it("IVR Response Code Event", async () => {
-        console.log(ringoverAuthorization)
         const res = await request(app)
             .post("/ringover/webhook-ivr")
             .set("Content-Type", "application/json")

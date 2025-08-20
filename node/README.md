@@ -102,6 +102,10 @@ npm run watch
 ```
 npm run watch:mysql
 ```
+5. Run server but do not want the events logs
+```
+NODE_ENV=production npm start
+```
 5. Test locally
 ```
 npm test
