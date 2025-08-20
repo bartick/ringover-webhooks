@@ -205,4 +205,4 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 
 Author
 ------
-Made with Love by Ringover for his customers
+Made with love by Ringover for our customers.
