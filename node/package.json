@@ -1,0 +1,30 @@
+{
+  "name": "ringover-webhook-node",
+  "version": "0.0.1",
+  "description": "This project provides a complete implementation of a webhook integration using expressjs to handle Ringover events.",
+  "license": "BSD-2-Clause",
+  "author": "ringover",
+  "type": "commonjs",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "start:mysql": "node src/index.mysql.js",
+    "watch": "nodemon src/index.js",
+    "watch:mysql": "nodemon src/index.mysql.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.14.3",
+    "zod": "^4.0.17"
+  },
+  "devDependencies": {
+    "jest": "^30.0.5",
+    "nodemon": "^3.1.10",
+    "supertest": "^7.1.4"
+  }
+}
