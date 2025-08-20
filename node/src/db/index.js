@@ -1,3 +1,6 @@
+// Database connection pool
+// Create a connection pool for MySQL database
+
 const mysql = require("mysql2/promise");
 const { DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT } = require("../utils/config");
 

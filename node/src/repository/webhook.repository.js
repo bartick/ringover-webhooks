@@ -1,3 +1,6 @@
+// Webhook repository
+// Here we are defining the database operations for webhook events
+
 const db = require("../db");
 
 const insertIntoDatabase = async (eventType, event, resource, timestamp, data, attempt) => {

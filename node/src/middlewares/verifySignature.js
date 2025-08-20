@@ -1,3 +1,5 @@
+// Middleware to verify Ringover webhook signatures
+
 const jwt = require("jsonwebtoken");
 
 function verifySignature(secret) {

@@ -1,3 +1,6 @@
+// Ringover webhook routes
+// These file tells what are routes and requests allowed under /ringover
+
 const router = require('express').Router();
 
 const ringoverController = require('./../controllers/ringover.controller');

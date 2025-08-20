@@ -1,204 +1,172 @@
-Ringover Webhook API Integration with Express
-==============================================
+# Ringover Webhook API Integration (Express)
 
-Description
------------
-This project provides a complete implementation of a webhook integration using `Express` to handle Ringover events.
-It includes endpoints for various types of webhook events such as call events, contact events, contact search events,
-smart routing events, webhook messages, and IVR events.
+This project is an **Express.js app** that handles **Ringover webhook events**.
+It verifies, validates, logs, and stores events in **MySQL**.
 
-Each endpoint:
-  - Verifies the `HS512` signature to ensure authenticity.
-  - Validates the incoming JSON payload using `Zod` schemas.
-  - Logs the event details.
-  - Stores events in a MySQL database using `mysql2`.
-  - Returns sample responses based on the Ringover documentation.
+---
 
-Features
---------
-- Express endpoints for multiple Ringover webhook events.
-- HS512 signature verification to secure incoming requests.
-- Payload validation with Zod.
-- Event storage in a MySQL database.
-- Sample responses for smart routing, contact, and contact search events.
+## ✨ Features
 
-Prerequisites
--------------
-- Node.js (version 20 or higher)
-- MySQL database (optional)
-- Ringover account and API access
+* ✅ Multiple Express endpoints for Ringover events (calls, contacts, IVR, smart routing, messages).
+* 🔐 Request verification with **HS512 signature**.
+* 🧩 Payload validation using **Zod**.
+* 💾 Event storage with **MySQL** (`mysql2`).
+* 📋 Sample responses included (based on Ringover docs).
 
-Installation
-------------
-1. Clone the repository:
-```
+---
+
+## 🔧 Prerequisites
+
+* Node.js (v20+)
+* (Optional) MySQL server
+* A Ringover account with API access
+
+---
+
+## 🚀 Installation
+
+```bash
+# Clone repo
 git clone https://github.com/ringover/ringover-webhooks.git
-```
 
-3. Navigate to the project directory:
-```
+# Move into project
 cd node
-```
 
-4. Install the dependencies:
-```
+# Install dependencies
 npm install
 ```
 
-Configuration Main
--------------------
-Set the following environment variables or create a .env file:
+---
 
- - RINGOVER_SECRET_WEBHOOKS_CALL: Your secret key given by ringover
- - RINGOVER_SECRET_WEBHOOKS_CONTACT_CALL: Your secret key given by ringover
- - RINGOVER_SECRET_WEBHOOKS_CONTACT_SEARCH: Your secret key given by ringover
- - RINGOVER_SECRET_SMART_ROUTING_AND_IVR_CODE: Your secret key given by ringover
- - HTTP_PORT: Your HTTP port
+## ⚙️ Configuration
 
+Create a `.env` file with the following:
 
-Configuration MYSQL (optional)
--------------------
-Set the following environment variables or create a .env file:
+### HTTP Port
 
- - DB_HOST: Your database host
- - DB_USER: Your database user
- - DB_PASSWORD: Your database password
- - DB_NAME: Your database name
- - DB_PORT: Your database port
-
-Run MySql (optional)
-----------
-1. Start your MySQL server.
-2. Create a database for the project:
-```
-CREATE DATABASE <your_database_name>;
-```
-3. Create a user and grant privileges (replace `user` and `password` with your own values):
-```
-CREATE USER '<your_database_user>'@'<your_database_host>' IDENTIFIED BY '<your_database_password>';
-GRANT ALL PRIVILEGES ON <your_database_name>.* TO '<your_database_user>'@'<your_database_host>';
-FLUSH PRIVILEGES;
-```
-4. Use the database and run the create table command in `<project_root>/node/src/db/mydb.sql`:
-```
-mysql -u <your_username> -p <your_database_name> < <project_root>/node/src/db/mydb.sql
+```env
+HTTP_PORT=3000
 ```
 
-Running the Application
------------------------
-1. Start the application:
+### Webhook Secrets
+
+```env
+RINGOVER_SECRET_WEBHOOKS_CALL=your_secret
+RINGOVER_SECRET_WEBHOOKS_CONTACT_CALL=your_secret
+RINGOVER_SECRET_WEBHOOKS_CONTACT_SEARCH=your_secret
+RINGOVER_SECRET_SMART_ROUTING_AND_IVR_CODE=your_secret
 ```
+
+### MySQL (optional)
+
+```env
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=ringover_webhooks
+DB_PORT=3306
+```
+
+### Suppress Logs (optional)
+
+```env
+NODE_ENV=production
+```
+
+---
+
+## 🗄️ Database Setup (Optional)
+
+1. Start MySQL.
+2. Create a database and user:
+
+   ```sql
+   CREATE DATABASE ringover_webhooks;
+   CREATE USER 'ringover_user'@'%' IDENTIFIED BY 'ringoverpassword';
+   GRANT ALL PRIVILEGES ON ringover_webhooks.* TO 'ringover_user'@'%';
+   FLUSH PRIVILEGES;
+   ```
+3. Run the schema:
+
+   ```bash
+   mysql -u ringover_user -p ringover_webhooks < src/db/mydb.sql
+   ```
+
+---
+
+## ▶️ Running
+
+```bash
+# Start app
 npm start
-```
-2. Start the application with mysql:
-```
+
+# Start with MySQL
 npm run start:mysql
-```
-3. Start the application using nodemon:
-```
+
+# Start with nodemon
 npm run watch
-```
-4. Start the application with mysql using nodemon:
-```
+
+# Nodemon + MySQL
 npm run watch:mysql
+
+# Suppress logs (production mode)
+NODE_ENV=production npm start
 ```
-5. Test locally
-```
+
+---
+
+## 🧪 Testing
+
+```bash
+# Run Jest tests
 npm test
 ```
-6. Test the webhook endpoints using a tool like Postman or curl.
 
-Endpoints
----------
-```
-Call Events:
-  - /ringover/call/voicemail_available
-  - /ringover/call/record_available
-  - /ringover/call/tags_updated
-  - /ringover/call/comments_updated
-  - /ringover/call/voicemail
-  - /ringover/call/missed
-  - /ringover/call/hangup
-  - /ringover/call/answered
-  - /ringover/call/ringing
-```
+Use **Postman** or `curl` to send requests to endpoints.
 
-Contact Events:
-  - /ringover/contact
-    Sample Response:
-```
-{
-		"uuid": "b55f949b-c49b-4354-b10a-c8c4cdbd8690",
-		"firstname": "Jean-Pierre",
-		"lastname": "De La Court",
-		"company": "Ringover",
-		"url": "https://mycrm.com/client/18192233",
-		"data": {
-			"key1": "value1",
-			"key2": "value2",
-			"keyN": "valueN"
-		},
-		"is_shared": true
-}
-```
-  - /ringover/contact-search-event
-    Sample Response:
-```
-[
-	{
-		"firstname": "Jean-Pierre",
-		"lastname": "De La Court",
-		"company": "Ringover",
-		"url": "https://mycrm.com/client/18192233",
-		"numbers": [
-			{
-				"number": 33184800000,
-				"type": "mobile"
-			}
-		]	
-	}
-]
-```   
-Other Webhook Events:
-  - /ringover/webhook-message
-  - /ringover/webhook-ivr
+---
 
-Smart Routing:
-  - /ringover/smart_routing
-    Sample Response:
-```
-{
-	"name": "redirections",
-	"dispatch": "ringall",
-	"max_attempts": 1,
-	"start_delay": 0,
-	"is_stay_not_connected": 1,
-	"is_stay_in_call": 0,
-	"is_stay_planned_snoozed": 1,
-	"is_stay_snoozed": 0,
-	"ring_overlap": 0,
-	"agents": [
-		{
-			"agent_type": "agent_external",
-			"ring_duration": 25,
-			"ring_delay": 0,
-			"order": 1,
-			"number": 33123456789,
-			"is_pre_answer": 0,
-			"is_caller_id": 1,
-			"is_head_line": 0
-		}
-	]
-}      
-```
-License
--------
-This project is licensed under the BSD License. See the LICENSE file for details.
+## 📡 Endpoints
 
-Contributing
-------------
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
+### Call Events
 
-Author
-------
-Made with Love by Ringover for his customers
+* `/ringover/call/voicemail_available`
+* `/ringover/call/record_available`
+* `/ringover/call/tags_updated`
+* `/ringover/call/comments_updated`
+* `/ringover/call/voicemail`
+* `/ringover/call/missed`
+* `/ringover/call/hangup`
+* `/ringover/call/answered`
+* `/ringover/call/ringing`
+* `/ringover/webhook-message`
+
+### Contact Events
+
+* `/ringover/contact` – Returns contact details
+
+### Contact Search
+* `/ringover/contact-search-event` – Returns matching contacts
+
+### Smart Routing and IVR
+
+* `/ringover/smart_routing` – Returns routing rules & agents
+* `/ringover/webhook-ivr`
+
+---
+
+## 📜 License
+
+BSD License. See [LICENSE](https://github.com/ringover/ringover-webhooks/blob/main/LICENSE).
+
+---
+
+## 🤝 Contributing
+
+PRs and issues welcome! 🚀
+
+---
+
+## ❤️ Author
+
+Made with love by **Ringover** for our customers.

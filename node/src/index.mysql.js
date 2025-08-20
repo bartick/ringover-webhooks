@@ -1,6 +1,9 @@
+// Entry point for the MySQL version of the application.
+
 const app = require("./app");
 const db = require("./db");
 const { HTTP_PORT } = require("./utils/config");
+const logger = require("./utils/logger");
 
 let server;
 
@@ -12,24 +15,24 @@ async function start() {
 	conn.release();
 
 	server = app.listen(HTTP_PORT, () => {
-		console.log(`Server is running on port ${HTTP_PORT}`);
+		logger.debug(`Server is running on port ${HTTP_PORT}`);
 	});
 }
 
 async function shutdown(signal) {
-  	console.log(`\n${signal} received. Shutting down gracefully...`);
+  	logger.debug(`\n${signal} received. Shutting down gracefully...`);
 
   	try {
 		if (server) {
 			await new Promise((resolve, reject) => {
 				server.close((err) => (err ? reject(err) : resolve()));
 			});
-			console.log("✅ HTTP server closed");
+			logger.debug("✅ HTTP server closed");
 		}
 
 		if (db) {
 			await db.end();
-			console.log("✅ Database pool closed");
+			logger.debug("✅ Database pool closed");
 		}
 
 		process.exit(0);
