@@ -1,3 +1,5 @@
+// Entry point of the application.
+
 const app = require("./app");
 const { HTTP_PORT } = require("./utils/config");
 const logger = require("./utils/logger");

@@ -1,3 +1,6 @@
+// Logger configuration
+// logger options error, warn, info, http, verbose, debug, silly
+
 const { createLogger, format, transports } = require('winston');
 
 const {

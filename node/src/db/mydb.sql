@@ -1,3 +1,4 @@
+-- Webhook events table
 CREATE TABLE IF NOT EXISTS `webhook_events` (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     event_type VARCHAR(50) NOT NULL,

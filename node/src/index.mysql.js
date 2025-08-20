@@ -1,3 +1,5 @@
+// Entry point for the MySQL version of the application.
+
 const app = require("./app");
 const db = require("./db");
 const { HTTP_PORT } = require("./utils/config");

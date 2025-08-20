@@ -1,3 +1,7 @@
+// Ringover webhook services
+// Handle all business logic here
+// these files are being used by ./controllers to pass on data
+
 const { insertIntoDatabase } = require("../repository/webhook.repository");
 const logger = require("../utils/logger");
 

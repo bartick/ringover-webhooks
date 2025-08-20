@@ -1,3 +1,8 @@
+// Ringover controller
+// Here we are defining the request handlers for Ringover webhooks
+// These functions are only responsible to handeling and processing the incoming webhook events
+// all business logic is handled by ./services
+
 const { z } = require("zod");
 
 const ringoverService = require("../services/ringover.service");

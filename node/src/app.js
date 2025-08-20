@@ -1,3 +1,5 @@
+// Sets up Express app, loads middleware, routes, and initializes the server.
+
 const express = require("express");
 const bodyParser = require('body-parser');
 const morgan = require('morgan');

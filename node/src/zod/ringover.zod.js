@@ -1,3 +1,7 @@
+// Zod schemas for Ringover webhook events.
+// These schemas might change in future (data of writing: 20th Aug, 2025)
+// For more info refer to: https://developer.ringover.com/#tag/webhook
+
 const { z } = require("zod");
 
 exports.IVRResponseEvent = z.object({
